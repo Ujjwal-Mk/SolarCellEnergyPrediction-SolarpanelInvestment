@@ -110,24 +110,34 @@
             
             <!-- Display Table if Consumption Cost is submitted -->
             {% if consumption_cost %}
-            <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: {{ consumption_cost }}</h2>
-            <table class="table table-bordered text-center mt-3">
+            <br><br><br><br><br><br><br><br>
+            <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
+            <br><br>
+            <table class="table table-bordered text-center mt-3" id="scrolldown">
                 <thead class="thead-dark">
                     <tr>
+                        <th>Topic</th>
                         <th>3 kWh</th>
                         <th>5 kWh</th>
                         <th>7.5 kWh</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td><b><b>Capital</b></b></td>
+                        <td>Rs. 1.5L - Rs. 3L</td>
+                        <td>Rs. 2.84L - Rs. 3.55L</td>
+                        <td>Rs. 5L - Rs. 7L</td>
+                    </tr>
                     {% for data in table_data %}
                     <tr>
-                        <td>{{ data['kWh'] }}</td>
-                        <td>{{ data['text1'] }}</td>
-                        <td>{{ data['text2'] }}</td>
+                        <td><b><b>{{ data['topic'] }}</b></b></td>
+                        <td class="{% if data['3']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['3'] }}</td>
+                        <td class="{% if data['5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['5'] }}</td>
+                        <td class="{% if data['7.5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['7.5'] }}</td>
                     </tr>
                     {% endfor %}
-                </tbody>
+                </tbody>                
             </table>
             <form method="POST" action="{{ url_for('index') }}">
                 <div class="text-center">
@@ -138,7 +148,7 @@
             <script>
                 // Scroll to the table
                 function scrollToTable() {
-                    var table = document.getElementById("contact");
+                    var table = document.getElementById("scrolldown");
                     if (table) {
                         table.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }

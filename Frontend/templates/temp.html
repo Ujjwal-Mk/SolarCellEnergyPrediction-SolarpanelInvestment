@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Solar?</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="51">
+    <!-- Navbar Start -->
+    <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-dark navbar-dark py-1 py-lg-0 px-lg-5">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+            <div class="navbar-nav ml-auto py-0">
+            </div>
+            <a href="index.html" class="navbar-brand bg-primary px-4 mx-3 d-none d-lg-block">
+                <h1 class="display-4 text-white text-uppercase m-0">Solar?</h1>
+            </a>
+            <div class="navbar-nav mr-auto py-0">
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-5 pb-5" id="home">
+        <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item position-relative active" style="height: 100vh; min-height: 400px;">
+                    <img class="position-absolute w-100 h-100" src="{{ url_for('static', filename='img/carousel-1.jpg') }}" style="object-fit: cover;">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 900px;">
+                            <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Solar Energy</h4>
+                            <h3 class="display-2 font-secondary text-white mb-4">Is Solar For You?</h3>
+                            <a class="btn btn-light font-weight-bold py-3 px-5 mt-2 btn-scroll" href="#contact">NEXT</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item position-relative" style="height: 100vh; min-height: 400px;">
+                    <img class="position-absolute w-100 h-100" src="{{ url_for('static', filename='img/carousel-2.jpg') }}" style="object-fit: cover;">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 900px;">
+                            <h4 class="text-white text-uppercase mb-4" style="letter-spacing: 3px;">Solar Energy</h4>
+                            <h3 class="display-2 font-secondary text-white mb-4">Let The Sun Work For Your Home</h3>
+                            <a class="btn btn-light font-weight-bold py-3 px-5 mt-2 btn-scroll" href="#contact">NEXT</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev justify-content-start" href="#header-carousel" data-slide="prev">
+                <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
+                    <span class="carousel-control-prev-icon mt-3"></span>
+                </div>
+            </a>
+            <a class="carousel-control-next justify-content-end" href="#header-carousel" data-slide="next">
+                <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
+                    <span class="carousel-control-next-icon mt-3"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-fluid py-5" id="contact">
+        <div class="container py-5">
+            <div class="section-title position-relative text-center">
+                <h6 class="text-uppercase text-primary mb-3" style="letter-spacing: 3px;">TABLE</h6>
+                <h1 class="font-secondary display-4">Cost Savings with Solar</h1>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-form">
+                        <div id="success"></div>
+                        <form method="POST" action="{{ url_for('index') }}" id="costForm">
+                            <div class="form-group">
+                                <label for="consumption_cost">Enter Average Electricity Consumption Cost:</label>
+                                <input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required">
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="submitCostButton">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Display Table if Consumption Cost is submitted -->
+            <div id="tableContent">
+                {% if consumption_cost %}
+                <br><br><br><br><br><br><br><br>
+                <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
+                <br><br>
+                <table class="table table-bordered text-center mt-3" id="scrolldown">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Topic</th>
+                            <th>3 kWh</th>
+                            <th>5 kWh</th>
+                            <th>7.5 kWh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b><b>Capital</b></b></td>
+                            <td>Rs. 1.5L - Rs. 3L</td>
+                            <td>Rs. 2.84L - Rs. 3.55L</td>
+                            <td>Rs. 5L - Rs. 7L</td>
+                        </tr>
+                        {% for data in table_data %}
+                        <tr>
+                            <td><b><b>{{ data['topic'] }}</b></b></td>
+                            <td class="{% if data['3']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['3'] }}</td>
+                            <td class="{% if data['5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['5'] }}</td>
+                            <td class="{% if data['7.5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['7.5'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>                
+                </table>
+                <form method="POST" action="{{ url_for('index') }}">
+                    <div class="text-center">
+                        <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" name="reset">Reset</button>
+                    </div>
+                </form>
+    
+                <script>
+                    // Scroll to the table
+                    function scrollToTable() {
+                        var table = document.getElementById("scrolldown");
+                        if (table) {
+                            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                    // Call scrollToTable function when the page loads
+                    scrollToTable();
+                </script>
+    
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+
+    <!-- Loading animation -->
+    <div id="loading" class="d-none justify-content-center align-items-center position-fixed w-100 h-100 bg-dark text-white">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your custom scripts -->
+    <script>
+        // Function to show loading animation
+        function showLoading() {
+            $('#loading').removeClass('d-none');
+        }
+
+        // Function to hide loading animation
+        function hideLoading() {
+            $('#loading').addClass('d-none');
+        }
+
+        // Attach event listener to form submission
+        $(document).ready(function() {
+            $('#costForm').submit(function (event) {
+                // Prevent default form submission
+                event.preventDefault();
+                // Show loading animation
+                showLoading();
+                // Submit form asynchronously
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        // Hide loading animation
+                        hideLoading();
+                        // Display response
+                        $('#tableContent').html(response);
+                    },
+                    error: function () {
+                        // Hide loading animation
+                        hideLoading();
+                        // Display error message
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

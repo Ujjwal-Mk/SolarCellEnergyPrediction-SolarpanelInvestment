@@ -132,9 +132,30 @@
                     {% for data in table_data %}
                     <tr>
                         <td><b><b>{{ data['topic'] }}</b></b></td>
-                        <td class="{% if data['3']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['3'] }}</td>
-                        <td class="{% if data['5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['5'] }}</td>
-                        <td class="{% if data['7.5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['7.5'] }}</td>
+                        {% if data['3'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['3'] %}text-danger{% else %}text-success{% endif %}">{{ data['3'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['3'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['3'] }}</td>
+                    {% endif %}
+                    
+                    <!-- Repeat for other columns -->
+                    {% if data['5'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['5'] %}text-danger{% else %}text-success{% endif %}">{{ data['5'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['5'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['5'] }}</td>
+                    {% endif %}
+                    
+                    {% if data['7.5'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['7.5'] %}text-danger{% else %}text-success{% endif %}">{{ data['7.5'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['7.5'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['7.5'] }}</td>
+                    {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>                

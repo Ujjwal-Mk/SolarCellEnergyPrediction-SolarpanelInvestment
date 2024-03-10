@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Solar?</title>
+    <title>Solarizz</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Favicon -->
@@ -34,9 +34,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav ml-auto py-0">
             </div>
-            <a href="index.html" class="navbar-brand bg-primary px-4 mx-3 d-none d-lg-block">
                 <h1 class="display-4 text-white text-uppercase m-0">Solarizz</h1>
-            </a>
             <div class="navbar-nav mr-auto py-0">
             </div>
         </div>
@@ -98,7 +96,7 @@
                         <form method="POST" action="{{ url_for('index') }}" id="costForm">
                             <div class="form-group">
                                 <label for="consumption_cost">Enter Average Electricity Consumption Cost:</label>
-                                <input type="number" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required">
+                                <input type="number" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required" min="0">
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="submitCostButton" action="{{ url_for('index') }}#contact">Submit</button>
@@ -108,12 +106,18 @@
                 </div>
             </div>
             
+            <div id="loading" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p class="text-primary">Processing...</p>
+            </div>
             <!-- Display Table if Consumption Cost is submitted -->
             {% if consumption_cost %}
             <br><br><br><br><br><br><br><br>
-            <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
+            <h2 class="font-secondary display-4 text-center mt-4" id="scrolldown">Feasibility Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
             <br><br>
-            <table class="table table-bordered text-center mt-3" id="scrolldown">
+            <table class="table table-bordered text-center mt-4">
                 <thead class="thead-dark">
                     <tr>
                         <th>Topic</th>

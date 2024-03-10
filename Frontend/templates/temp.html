@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Solar?</title>
+    <title>Solarizz</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <!-- Favicon -->
@@ -23,6 +23,15 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
+    <!-- Custom CSS for Table -->
+    <style>
+        /* Custom CSS for table size and text size */
+        #scrolldown {
+            transform: scale(1.5);
+            font-size: 1.5em;
+        }
+    </style>
+
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
@@ -34,9 +43,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav ml-auto py-0">
             </div>
-            <a href="index.html" class="navbar-brand bg-primary px-4 mx-3 d-none d-lg-block">
-                <h1 class="display-4 text-white text-uppercase m-0">Solar?</h1>
-            </a>
+                <h1 class="display-4 text-white text-uppercase m-0">Solarizz</h1>
             <div class="navbar-nav mr-auto py-0">
             </div>
         </div>
@@ -98,123 +105,120 @@
                         <form method="POST" action="{{ url_for('index') }}" id="costForm">
                             <div class="form-group">
                                 <label for="consumption_cost">Enter Average Electricity Consumption Cost:</label>
-                                <input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required">
+                                <input type="number" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required" min="0">
                             </div>
                             <div class="text-center">
-                                <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="submitCostButton">Submit</button>
+                                <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="submitCostButton" action="{{ url_for('index') }}#contact">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
             
-            <!-- Display Table if Consumption Cost is submitted -->
-            <div id="tableContent">
-                {% if consumption_cost %}
-                <br><br><br><br><br><br><br><br>
-                <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
-                <br><br>
-                <table class="table table-bordered text-center mt-3" id="scrolldown">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Topic</th>
-                            <th>3 kWh</th>
-                            <th>5 kWh</th>
-                            <th>7.5 kWh</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><b><b>Capital</b></b></td>
-                            <td>Rs. 1.5L - Rs. 3L</td>
-                            <td>Rs. 2.84L - Rs. 3.55L</td>
-                            <td>Rs. 5L - Rs. 7L</td>
-                        </tr>
-                        {% for data in table_data %}
-                        <tr>
-                            <td><b><b>{{ data['topic'] }}</b></b></td>
-                            <td class="{% if data['3']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['3'] }}</td>
-                            <td class="{% if data['5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['5'] }}</td>
-                            <td class="{% if data['7.5']|float >= 0 %}text-success{% else %}text-danger{% endif %}">Rs. {{ data['7.5'] }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>                
-                </table>
-                <form method="POST" action="{{ url_for('index') }}">
-                    <div class="text-center">
-                        <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" name="reset">Reset</button>
-                    </div>
-                </form>
-    
-                <script>
-                    // Scroll to the table
-                    function scrollToTable() {
-                        var table = document.getElementById("scrolldown");
-                        if (table) {
-                            table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    }
-                    // Call scrollToTable function when the page loads
-                    scrollToTable();
-                </script>
-    
-                {% endif %}
+            <div id="loading" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p class="text-primary">Processing...</p>
             </div>
+            <!-- Display Table if Consumption Cost is submitted -->
+            {% if consumption_cost %}
+            <br><br><br><br><br><br><br><br>
+            <h2 class="font-secondary display-4 text-center mt-5">Table for Average Electricity Consumption Cost: Rs. {{ consumption_cost }}</h2>
+            <br><br>
+            <table class="table table-bordered text-center mt-3" id="scrolldown">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Topic</th>
+                        <th>3 kWh</th>
+                        <th>5 kWh</th>
+                        <th>7.5 kWh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b><b>Capital</b></b></td>
+                        <td>Rs. 1.5L - Rs. 3L</td>
+                        <td>Rs. 2.84L - Rs. 3.55L</td>
+                        <td>Rs. 5L - Rs. 7L</td>
+                    </tr>
+                    {% for data in table_data %}
+                    <tr>
+                        <td><b><b>{{ data['topic'] }}</b></b></td>
+                        {% if data['3'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['3'] %}text-danger{% else %}text-success{% endif %}">{{ data['3'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['3'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['3'] }}</td>
+                    {% endif %}
+                    
+                    <!-- Repeat for other columns -->
+                    {% if data['5'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['5'] %}text-danger{% else %}text-success{% endif %}">{{ data['5'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['5'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['5'] }}</td>
+                    {% endif %}
+                    
+                    {% if data['7.5'] is string %}
+                        <!-- Apply conditions for strings -->
+                        <td class="{% if 'This capacity' in data['7.5'] %}text-danger{% else %}text-success{% endif %}">{{ data['7.5'] }}</td>
+                    {% else %}
+                        <!-- Apply conditions for floats -->
+                        <td class="{% if data['7.5'] >= 0 %}text-success{% else %}text-danger{% endif %}">{{ data['7.5'] }}</td>
+                    {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>                
+            </table>
+            <form method="POST" action="{{ url_for('index') }}">
+                <div class="text-center">
+                    <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" name="reset">Reset</button>
+                </div>
+            </form>
+
+            <script>
+                // Scroll to the table
+                function scrollToTable() {
+                    var table = document.getElementById("scrolldown");
+                    if (table) {
+                        table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+                // Call scrollToTable function when the page loads
+                scrollToTable();
+            </script>
+
+            {% endif %}
         </div>
     </div>
     <!-- Contact End -->
 
 
-    <!-- Loading animation -->
-    <div id="loading" class="d-none justify-content-center align-items-center position-fixed w-100 h-100 bg-dark text-white">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+    <!-- Scroll to Bottom -->
+    <i class="fa fa-2x fa-angle-down text-white scroll-to-bottom"></i>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-outline-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='lib/easing/easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/isotope/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/lightbox/js/lightbox.min.js') }}"></script>
 
-    <!-- Your custom scripts -->
-    <script>
-        // Function to show loading animation
-        function showLoading() {
-            $('#loading').removeClass('d-none');
-        }
+    <!-- Contact Javascript File -->
+    <script src="{{ url_for('static', filename='mail/jqBootstrapValidation.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='mail/contact.js') }}"></script>
 
-        // Function to hide loading animation
-        function hideLoading() {
-            $('#loading').addClass('d-none');
-        }
+    <!-- Template Javascript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-        // Attach event listener to form submission
-        $(document).ready(function() {
-            $('#costForm').submit(function (event) {
-                // Prevent default form submission
-                event.preventDefault();
-                // Show loading animation
-                showLoading();
-                // Submit form asynchronously
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function (response) {
-                        // Hide loading animation
-                        hideLoading();
-                        // Display response
-                        $('#tableContent').html(response);
-                    },
-                    error: function () {
-                        // Hide loading animation
-                        hideLoading();
-                        // Display error message
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>

@@ -96,7 +96,7 @@
                         <form method="POST" action="{{ url_for('index') }}" id="costForm">
                             <div class="form-group">
                                 <label for="consumption_cost">Enter Average Electricity Consumption Cost:</label>
-                                <input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required">
+                                <input type="number" class="form-control bg-secondary border-0 py-4 px-3" id="consumption_cost" name="consumption_cost" required="required">
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="submitCostButton" action="{{ url_for('index') }}#contact">Submit</button>
